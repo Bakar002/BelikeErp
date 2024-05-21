@@ -25,7 +25,7 @@ export const AdminAddGrade = () => {
   useEffect(() => {
     const fetchAllCourses = async () => {
       try {
-        const response = await axios.get("/api/v1/admin/load-all-courses");
+        const response = await axios.get("https://belikeerp.onrender.com/load-all-courses");
         setCourses(response.data.courses);
       } catch (error) {
         console.log(error.response.data.message);
@@ -34,7 +34,7 @@ export const AdminAddGrade = () => {
     fetchAllCourses();
     const fetchAllTeachers = async () => {
       try {
-        const response = await axios.get("/api/v1/admin/load-all-teachers");
+        const response = await axios.get("https://belikeerp.onrender.com/load-all-teachers");
         setAllTeachers(response?.data?.teachers);
       } catch (error) {
         console.log(error?.response?.data?.message);
@@ -104,7 +104,7 @@ export const AdminAddGrade = () => {
       const sendGradeData = async () => {
         try {
           setLoading(true);
-          const response = await axios.post("/api/v1/admin/add-grade", data);
+          const response = await axios.post("https://belikeerp.onrender.com/add-grade", data);
           handleShowSuccessToast(response.data.message);
           console.log(response.data.message);
           setGradeCategory("");

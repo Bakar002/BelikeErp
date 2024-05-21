@@ -70,7 +70,7 @@ const StudentLogin = () => {
         handleShowFailureToast("Email or Password is missing");
         return;
       }
-      const response = await axios.post("/api/v1/student/login/", {
+      const response = await axios.post("https://belikeerp.onrender.com/login/", {
         studentEmail: data?.email,
         studentPassword: data?.password,
       });

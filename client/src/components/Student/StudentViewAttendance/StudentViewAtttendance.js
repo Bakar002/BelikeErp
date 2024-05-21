@@ -16,7 +16,7 @@ const StudentViewAtttendance = () => {
   useEffect(() => {
     const loadCurrentStudentAttendance = async () => {
       try {
-        const response = await axios.get("/api/v1/student/view-attendance");
+        const response = await axios.get("https://belikeerp.onrender.com/view-attendance");
         setAttendance(response.data.attendanceData);
         setStudentAttendance(response.data.studentAttendance);
       } catch (error) {

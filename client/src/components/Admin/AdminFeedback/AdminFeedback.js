@@ -8,7 +8,7 @@ export default function AdminFeedback() {
     const loadFeedbacks = async () => {
       try {
         const response = await axios.get(
-          "/api/v1/admin/load-all-courses-feedbacks"
+          "https://belikeerp.onrender.com/load-all-courses-feedbacks"
         );
         setFeedbacks(response.data.coursesFeedbacks);
       } catch (error) {

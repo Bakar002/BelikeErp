@@ -20,7 +20,7 @@ export const AddCourse = () => {
   useEffect(() => {
     const fetchAllTeachers = async () => {
       try {
-        const response = await axios.get("/api/v1/admin/load-all-teachers");
+        const response = await axios.get("https://belikeerp.onrender.com/load-all-teachers");
         setAllTeachers(response?.data?.teachers);
       } catch (error) {
         console.log(error?.response?.data?.message);
@@ -39,7 +39,7 @@ export const AddCourse = () => {
         try {
           setLoading(true);
           const response = await axios.post(
-            `/api/v1/admin/add-course/${courseTeacher}`,
+            `https://belikeerp.onrender.com/add-course/${courseTeacher}`,
             data
           );
           handleShowSuccessToast(response.data.message);

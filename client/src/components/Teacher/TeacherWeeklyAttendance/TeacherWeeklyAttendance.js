@@ -10,7 +10,7 @@ export default function TeacherWeeklyAttendance() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "/api/v1/teacher/view-grade-attendance"
+          "https://belikeerp.onrender.com/view-grade-attendance"
         );
         setAttendanceData(response.data.gradeStudentsAttendance);
       } catch (error) {
@@ -23,7 +23,7 @@ export default function TeacherWeeklyAttendance() {
     const loadAllGradeStudents = async () => {
       try {
         const response = await axios.get(
-          "/api/v1/teacher/load-all-students-same-grade"
+          "https://belikeerp.onrender.com/load-all-students-same-grade"
         );
         setAllStudents(response.data.studentsSameGrade);
       } catch (error) {

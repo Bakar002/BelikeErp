@@ -23,7 +23,7 @@ export const AdminAddStudent = () => {
   useEffect(() => {
     const fetchAllGrades = async () => {
       try {
-        const response = await axios.get("/api/v1/admin/load-all-grades");
+        const response = await axios.get("https://belikeerp.onrender.com/load-all-grades");
         setGrades(response.data.grades);
       } catch (error) {
         console.log(error.response.data.message);
@@ -32,7 +32,7 @@ export const AdminAddStudent = () => {
     fetchAllGrades();
     const fetchAllCourses = async () => {
       try {
-        const response = await axios.get("/api/v1/admin/load-all-courses");
+        const response = await axios.get("https://belikeerp.onrender.com/load-all-courses");
         setCourses(response.data.courses);
       } catch (error) {
         console.log(error.response.data.message);
@@ -79,7 +79,7 @@ export const AdminAddStudent = () => {
         try {
           setLoading(true);
           const response = await axios.post(
-            `/api/v1/admin/add-student/${studentGrade}`,
+            `https://belikeerp.onrender.com/add-student/${studentGrade}`,
             data,
             {
               headers: {

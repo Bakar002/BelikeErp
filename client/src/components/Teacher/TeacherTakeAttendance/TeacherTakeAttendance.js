@@ -20,7 +20,7 @@ const TeacherTakeAttendance = () => {
     const loadAllGradeStudents = async () => {
       try {
         const response = await axios.get(
-          "/api/v1/teacher/load-all-students-same-grade"
+          "https://belikeerp.onrender.com/load-all-students-same-grade"
         );
         setAllStudents(response.data.studentsSameGrade);
         setAttendance(
@@ -44,7 +44,7 @@ const TeacherTakeAttendance = () => {
       const loadViewGradeAttendance = async () => {
         try {
           const response = await axios.get(
-            "/api/v1/teacher/view-grade-attendance"
+            "https://belikeerp.onrender.com/view-grade-attendance"
           );
           setViewGradeAttendance(response.data.gradeStudentsAttendance);
         } catch (error) {
@@ -61,7 +61,7 @@ const TeacherTakeAttendance = () => {
       };
       try {
         const response = await axios.post(
-          `/api/v1/teacher/take-attendance/${currentTeacherData?.teacher?.teacherGradeIncharge?._id}`,
+          `https://belikeerp.onrender.com/take-attendance/${currentTeacherData?.teacher?.teacherGradeIncharge?._id}`,
           data
         );
         console.log(response.data.message);

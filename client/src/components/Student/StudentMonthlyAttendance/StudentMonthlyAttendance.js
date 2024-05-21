@@ -17,7 +17,7 @@ const StudentMonthlyAtttendance = () => {
     const loadCurrentStudentAttendance = async () => {
       try {
         const response = await axios.get(
-          "/api/v1/student/view-attendance/monthly"
+          "https://belikeerp.onrender.com/view-attendance/monthly"
         );
         setAttendance(response.data.attendanceData);
         setStudentAttendance(response.data.studentAttendance);
