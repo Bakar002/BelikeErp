@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({
-  origin: 'https://erp-frontend-rzp3.vercel.app/',
+  origin: 'https://erp-frontend-s74v.vercel.app',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }))
