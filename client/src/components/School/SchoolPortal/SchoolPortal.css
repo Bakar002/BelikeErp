@@ -1,0 +1,88 @@
+.chatbot {
+  position: fixed;
+  z-index: 99999999;
+}
+
+.ccw_plugin .animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: white;
+  background-color: #033e71;
+}
+.logo {
+  filter: invert(100%);
+}
+.punjab {
+  color: #40b08c;
+  font-weight: 700;
+  font-size: 2rem;
+}
+h6 {
+  color: #033e71;
+}
+.school {
+  display: flex;
+  font-weight: 700;
+  font-size: 2.9rem;
+  color: #40b08c;
+}
+
+.img-container {
+  margin-bottom: 20px;
+}
+
+.img-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.btn {
+  border: 2px solid transparent;
+  /* background-color:red; */
+}
+
+.btn:hover {
+  background-color: transparent;
+  border: 2px solid transparent;
+}
+
+.card i {
+  /* color: rgb(255, 183, 0); */
+  /* color: #033e71; */
+  color: #40b08c;
+}
+
+.btn h6 {
+  color: #033e71;
+}
+.card {
+  transition: all 0.3s ease-out 0s;
+}
+.custom-hover,
+.card:hover {
+  background-color: #40b08c;
+}
+
+.custom-hover,
+.card:hover .card-body h6 {
+  color: white;
+  z-index: 100;
+}
+
+.card:hover i {
+  color: white;
+  z-index: 100;
+}
+
+.card:hover img {
+  /* filter: invert(100%); */
+  background: #fff;
+}

@@ -1,0 +1,36 @@
+/* Add this CSS to your global styles or CSS file */
+.input-border:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%; 
+    width: 0;
+    height: 2px; 
+    background-color: #000;
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out; 
+  }
+  
+  .input-border:focus:before {
+    width: 100%; 
+    left: 0; 
+  }
+  .gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+  }
+
+  .slick-dots li button::before  {
+    
+   font-size: 12px;
+     background-color: transparent;
+   /* color: rgb(252, 252, 252); */
+  }
+  .slick-dots li.slick-active button:before{
+    
+    color: rgb(244, 244, 244);
+  }
+  
