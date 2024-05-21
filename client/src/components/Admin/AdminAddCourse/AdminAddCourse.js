@@ -39,7 +39,7 @@ export const AddCourse = () => {
         try {
           setLoading(true);
           const response = await axios.post(
-            `https://belikeerp.onrender.com/add-course/${courseTeacher}`,
+            `https://belikeerp.onrender.com/api/v1/admin/add-course/${courseTeacher}`,
             data
           );
           handleShowSuccessToast(response.data.message);

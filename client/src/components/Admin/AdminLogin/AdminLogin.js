@@ -68,7 +68,7 @@ const AdminLogin = () => {
         console.log("Email or password is missing");
         return;
       }
-      const response = await axios.post("/api/v1/admin/login", {
+      const response = await axios.post("https://belikeerp.onrender.com/api/v1/admin/login", {
         adminEmail: data?.email,
         adminPassword: data?.password,
       });

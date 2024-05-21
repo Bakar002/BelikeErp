@@ -11,7 +11,7 @@
     "axios": "^1.6.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.51.3",
+    "react-hook-form": "^7.51.5",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.0",
     "react-loader-spinner": "^6.1.6",
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm i",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
