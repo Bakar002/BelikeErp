@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon ./server.js",
-    "build":"npm i"
+    "build": "npm i"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
     "bson": "^6.7.0",
     "cloudinary": "^2.2.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "datauri": "^4.1.0",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
@@ -25,5 +26,8 @@
     "netlify-cli": "^17.23.1",
     "netlify-lambda": "^2.0.16",
     "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
