@@ -95,7 +95,7 @@ exports.adminLogin = async (req, res) => {
     // };
     // res.cookie("adminToken", adminToken, options);
 if (isPasswordMatched) {
-  jwt.sign({_id:isEmailExisted._id }, jwtSecret, {}, (err, token) => {
+  jwt.sign({_id:isEmailExisted._id }, process.env.JWT_SECRET , {}, (err, token) => {
     res.cookie('adminToken', token, {sameSite:'none', secure:true}).json({
       id: isEmailExisted._id ,
     });
