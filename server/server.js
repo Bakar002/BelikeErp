@@ -10,7 +10,7 @@ cloudinary.v2.config({
 });
 app.get("/", (req, res) => {
   res.status(200).json({
-    message: "Imran Malik",
+    message: "Imran Malik test",
   });
 });
 const PORT = process.env.PORT || 5500;
