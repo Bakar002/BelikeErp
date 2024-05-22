@@ -57,76 +57,59 @@ exports.createAdmin = async (req, res) => {
 exports.adminLogin = async (req, res) => {
   try {
     const { adminEmail, adminPassword } = req.body;
+    
+    // Changed from 404 to 400 for missing credentials
     if (!adminEmail || !adminPassword) {
-      return res.status(404).json({
-        statusCode: STATUS_CODES[404],
+      return res.status(400).json({
+        statusCode: 400,
         message: "adminEmail or adminPassword is missing",
       });
     }
-    const isEmailExisted = await adminModel
-      .findOne({ adminEmail })
-      .select("+adminPassword");
+
+    const isEmailExisted = await adminModel.findOne({ adminEmail }).select("+adminPassword");
     if (!isEmailExisted) {
       return res.status(404).json({
-        statusCode: STATUS_CODES[404],
+        statusCode: 404,
         message: `${adminEmail} is not existed in database`,
       });
     }
-    const isPasswordMatched = await bcrypt.compare(
-      adminPassword,
-      isEmailExisted.adminPassword
-    );
+
+    const isPasswordMatched = await bcrypt.compare(adminPassword, isEmailExisted.adminPassword);
     if (!isPasswordMatched) {
       return res.status(401).json({
-        statusCode: STATUS_CODES[401],
-        message: `Password is incorrect`,
+        statusCode: 401,
+        message: "Password is incorrect",
       });
     }
 
-    // const adminToken = await jwt.sign(
-    //   { _id: isEmailExisted._id },
-    //   process.env.ADMIN_SECRET_TOKEN
-    // );
-    // const options = {
-    //   httpOnly: false,
-    //   maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
-    //   secure: true,
-    //   sameSite: "Strict",
-    // };
-    // res.cookie("adminToken", adminToken, options);
-if (isPasswordMatched) {
-  jwt.sign({_id:isEmailExisted._id }, process.env.JWT_SECRET , {}, (err, token) => {
-    res.cookie('adminToken', token, {sameSite:'none', secure:true}).json({
-      id: isEmailExisted._id ,
-    });
-  });
-}
-res.status(200).json({
-      statusCode: STATUS_CODES[200],
-      message: "You logged in successfully",
+    // JWT token generation and setting the cookie
+    jwt.sign({ _id: isEmailExisted._id }, process.env.ADMIN_SECRET_TOKEN, {}, (err, token) => {
+      if (err) {
+        // Added error handling for JWT generation
+        return res.status(500).json({
+          statusCode: 500,
+          message: "Token generation failed",
+        });
+      }
+      // Ensure single response after setting the cookie
+      res.cookie('adminToken', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
+        secure: true,
+        sameSite: 'Strict',
+      }).status(200).json({
+        statusCode: 200,
+        message: "You logged in successfully",
+        id: isEmailExisted._id,
+      });
     });
   } catch (error) {
     return res.status(500).json({
-      statusCode: STATUS_CODES[500],
+      statusCode: 500,
       message: error.message,
     });
   }
 };
-
-//
-
-// const passOk = bcrypt.compareSync(password, foundUser.password);
-// if (passOk) {
-//   jwt.sign({userId:foundUser._id,username}, jwtSecret, {}, (err, token) => {
-//     res.cookie('token', token, {sameSite:'none', secure:true}).json({
-//       id: foundUser._id,
-//     });
-//   });
-// }
-
-
-//
-
 exports.addStudent = async (req, res) => {
   try {
     let files = req.files;
