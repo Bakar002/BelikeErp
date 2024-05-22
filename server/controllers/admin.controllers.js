@@ -88,8 +88,9 @@ exports.adminLogin = async (req, res) => {
     );
     const options = {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 2,
+      maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
       secure: true,
+      sameSite: "Strict",
     };
     res.cookie("adminToken", adminToken, options);
     res.status(200).json({

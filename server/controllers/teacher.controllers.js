@@ -44,8 +44,9 @@ exports.teacherLogin = async (req, res) => {
     }
     const options = {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 10,
+      maxAge: 1000 * 60 * 60 * 24 * 20,
       secure: true,
+      sameSite: "Strict",
     };
     const teacherToken = await jwt.sign(
       { _id: isTeacherEmailExisted._id },

@@ -57,6 +57,7 @@ exports.studentLogin = async (req, res) => {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 20,
       secure: true,
+      sameSite: "Strict",
     };
     res.cookie("studentToken", studentToken, options);
     return res.status(200).json({
