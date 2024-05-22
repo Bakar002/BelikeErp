@@ -96,7 +96,7 @@ exports.adminLogin = async (req, res) => {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
         secure: true,
-        sameSite: 'Strict',
+        sameSite: 'none',
       }).status(200).json({
         statusCode: 200,
         message: "You logged in successfully",
