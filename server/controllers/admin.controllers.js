@@ -82,18 +82,26 @@ exports.adminLogin = async (req, res) => {
         message: `Password is incorrect`,
       });
     }
-    const adminToken = await jwt.sign(
-      { _id: isEmailExisted._id },
-      process.env.ADMIN_SECRET_TOKEN
-    );
-    const options = {
-      httpOnly: false,
-      maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
-      secure: true,
-      sameSite: "Strict",
-    };
-    res.cookie("adminToken", adminToken, options);
-    res.status(200).json({
+
+    // const adminToken = await jwt.sign(
+    //   { _id: isEmailExisted._id },
+    //   process.env.ADMIN_SECRET_TOKEN
+    // );
+    // const options = {
+    //   httpOnly: false,
+    //   maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
+    //   secure: true,
+    //   sameSite: "Strict",
+    // };
+    // res.cookie("adminToken", adminToken, options);
+if (isPasswordMatched) {
+  jwt.sign({_id:isEmailExisted._id }, jwtSecret, {}, (err, token) => {
+    res.cookie('adminToken', token, {sameSite:'none', secure:true}).json({
+      id: isEmailExisted._id ,
+    });
+  });
+}
+res.status(200).json({
       statusCode: STATUS_CODES[200],
       message: "You logged in successfully",
     });
@@ -104,6 +112,20 @@ exports.adminLogin = async (req, res) => {
     });
   }
 };
+
+//
+
+// const passOk = bcrypt.compareSync(password, foundUser.password);
+// if (passOk) {
+//   jwt.sign({userId:foundUser._id,username}, jwtSecret, {}, (err, token) => {
+//     res.cookie('token', token, {sameSite:'none', secure:true}).json({
+//       id: foundUser._id,
+//     });
+//   });
+// }
+
+
+//
 
 exports.addStudent = async (req, res) => {
   try {
