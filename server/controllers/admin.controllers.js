@@ -87,7 +87,7 @@ exports.adminLogin = async (req, res) => {
       process.env.ADMIN_SECRET_TOKEN
     );
     const options = {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
       secure: true,
       sameSite: "Strict",
