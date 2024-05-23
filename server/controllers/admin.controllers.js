@@ -14,41 +14,48 @@ const attendanceModel = require("../models/attendance.models");
 require("dotenv").config();
 exports.createAdmin = async (req, res) => {
   try {
-    const files = req.files;
+    const files = req.files || [];
+    
     if (!req.body) {
       return res.status(404).json({
-        statusCode: STATUS_CODES[404],
+        statusCode: STATUS_CODES.NOT_FOUND,
         message: "Req Body is empty or null",
       });
     }
+    
     const { adminName, adminEmail, adminPassword } = req.body;
+    
     const adminEmailExists = await adminModel.findOne({ adminEmail });
     if (adminEmailExists) {
       return res.status(409).json({
-        statusCode: STATUS_CODES[409],
+        statusCode: STATUS_CODES.CONFLICT,
         message: `${adminEmail} is already registered`,
       });
     }
-    let image = files[0];
-    if (image.length > 0) {
-      image = image[0];
+
+    let adminAvatar = "null"; // Default value for avatar
+    
+    if (files.length > 0) {
+      const image = files[0];
+      const imageURI = getImageUri(image); // Ensure this function correctly processes the image
+      const imageUpload = await cloudinary.uploader.upload(imageURI.content);
+      adminAvatar = imageUpload.url;
     }
-    const imageURI = getImageUri(image);
-    const imageUpload = await cloudinary.v2.uploader.upload(imageURI.content);
-    const adminAvatar = imageUpload.url;
+    
     await adminModel.create({
       adminName,
       adminEmail,
       adminPassword,
-      adminAvatar: adminAvatar || "null",
+      adminAvatar,
     });
+    
     return res.status(200).json({
-      statusCode: STATUS_CODES[200],
+      statusCode: STATUS_CODES.OK,
       message: "Admin is created successfully",
     });
   } catch (error) {
     res.status(500).json({
-      errorStatusCode: STATUS_CODES[500],
+      errorStatusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
       errorMessage: error.message,
     });
   }
