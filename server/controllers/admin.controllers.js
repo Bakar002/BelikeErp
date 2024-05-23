@@ -591,7 +591,16 @@ exports.adminLogout = async (req, res) => {
         message: "Please login first",
       });
     }
-    res.clearCookie("adminToken");
+
+    // Clear the adminToken cookie
+    res.clearCookie("adminToken", {
+      path: '/', // Ensure the path is correct
+      domain: 'belikeerp-3.onrender.com', // Replace with your actual domain
+      httpOnly: true, // Ensure this matches how the cookie was originally set
+      secure: true, // Use true if the cookie is set over HTTPS
+      sameSite: 'none' // Ensure this matches how the cookie was originally set
+    });
+
     return res.status(200).json({
       statusCode: STATUS_CODES[200],
       message: "You logged out successfully",
@@ -603,6 +612,7 @@ exports.adminLogout = async (req, res) => {
     });
   }
 };
+
 
 exports.viewGradeResult = async (req, res) => {
   try {
