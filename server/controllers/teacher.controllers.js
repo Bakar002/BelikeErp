@@ -42,28 +42,60 @@ exports.teacherLogin = async (req, res) => {
           "Password is incorrect, please add correct password and try again!",
       });
     }
-    const options = {
+//     const options = {
+//       httpOnly: true,
+//       maxAge: 1000 * 60 * 60 * 24 * 20,
+//       secure: true,
+//       sameSite: "Strict",
+//     };
+//     const teacherToken = await jwt.sign(
+//       { _id: isTeacherEmailExisted._id },
+//       process.env.TEACHER_SECRET_TOKEN
+//     );
+//     res.cookie("teacherToken", teacherToken, options);
+//     return res.status(200).json({
+//       statusCode: STATUS_CODES[200],
+//       message: "You signed in successfully",
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       statusCode: STATUS_CODES[500],
+//       message: error.message,
+//     });
+//   }
+// };
+// JWT token generation and setting the cookie
+   jwt.sign({ _id: isTeacherEmailExisted._id }, process.env.TEACHER_SECRET_TOKEN, {}, (err, token) => {
+    if (err) {
+      // Added error handling for JWT generation
+      return res.status(500).json({
+        statusCode: 500,
+        message: "Token generation failed",
+      });
+    }
+    // Ensure single response after setting the cookie
+    res.cookie('teacherToken', token, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 20,
+      maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
       secure: true,
-      sameSite: "Strict",
-    };
-    const teacherToken = await jwt.sign(
-      { _id: isTeacherEmailExisted._id },
-      process.env.TEACHER_SECRET_TOKEN
-    );
-    res.cookie("teacherToken", teacherToken, options);
-    return res.status(200).json({
-      statusCode: STATUS_CODES[200],
-      message: "You signed in successfully",
+      sameSite: 'none',
+    }).status(200).json({
+      statusCode: 200,
+      message: "You logged in successfully",
+      id: isTeacherEmailExisted._id,
     });
-  } catch (error) {
-    return res.status(500).json({
-      statusCode: STATUS_CODES[500],
-      message: error.message,
-    });
-  }
+  });
+} catch (error) {
+  return res.status(500).json({
+    statusCode: 500,
+    message: error.message,
+  });
+}
 };
+
+
+
+
 exports.createAttendance = async (req, res) => {
   try {
     const { gradeId } = req.params.id;
