@@ -49,28 +49,58 @@ exports.studentLogin = async (req, res) => {
         message: "Incorrect password!",
       });
     }
-    const studentToken = await jwt.sign(
-      { _id: isStudentEmailExisted._id },
-      process.env.STUDENT_SECRET_TOKEN
-    );
-    const options = {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 20,
-      secure: true,
-      sameSite: "Strict",
-    };
-    res.cookie("studentToken", studentToken, options);
-    return res.status(200).json({
-      statusCode: STATUS_CODES[200],
-      message: "You logged in successfully",
-    });
-  } catch (error) {
+//     const studentToken = await jwt.sign(
+//       { _id: isStudentEmailExisted._id },
+//       process.env.STUDENT_SECRET_TOKEN
+//     );
+//     const options = {
+//       httpOnly: true,
+//       maxAge: 1000 * 60 * 60 * 24 * 20,
+//       secure: true,
+//       sameSite: "Strict",
+//     };
+//     res.cookie("studentToken", studentToken, options);
+//     return res.status(200).json({
+//       statusCode: STATUS_CODES[200],
+//       message: "You logged in successfully",
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       statusCode: STATUS_CODES[500],
+//       message: error.message,
+//     });
+//   }
+// };
+
+
+jwt.sign({ _id: isStudentEmailExisted._id }, process.env.STUDENT_SECRET_TOKEN, {}, (err, token) => {
+  if (err) {
+    // Added error handling for JWT generation
     return res.status(500).json({
-      statusCode: STATUS_CODES[500],
-      message: error.message,
+      statusCode: 500,
+      message: "Token generation failed",
     });
   }
+  // Ensure single response after setting the cookie
+  res.cookie('studentToken', token, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 2, // 2 days
+    secure: true,
+    sameSite: 'none',
+  }).status(200).json({
+    statusCode: 200,
+    message: "You logged in successfully",
+    id: isStudentEmailExisted._id,
+  });
+});
+} catch (error) {
+return res.status(500).json({
+  statusCode: 500,
+  message: error.message,
+});
+}
 };
+
 
 exports.studentLogout = async (req, res) => {
   try {

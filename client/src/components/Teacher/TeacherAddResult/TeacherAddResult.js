@@ -22,7 +22,7 @@ export const TeacherAddResult = () => {
     const loadSameGradeStudents = async () => {
       try {
         const response = await axios.get(
-          `https://belikeerp.onrender.com/load-students-with-grade/${grade}`
+          `https://belikeerp-3.onrender.com/load-students-with-grade/${grade}`
         );
         setStudents(response.data.students);
       } catch (error) {
@@ -46,7 +46,7 @@ export const TeacherAddResult = () => {
       }
       try {
         const response = await axios.post(
-          `https://belikeerp.onrender.com/create-result/${data.course}/${data.student}/${data.grade}`,
+          `https://belikeerp-3.onrender.com/create-result/${data.course}/${data.student}/${data.grade}`,
           {
             resultObtainedNumber: data.obtainedMarks,
             resultTotalMarks: data.totalMarks,
