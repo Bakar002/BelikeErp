@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors({
-  origin: 'https://erp-frontend-s74v.vercel.app',
+  origin: 'https://www.belikegroup.org',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }))
