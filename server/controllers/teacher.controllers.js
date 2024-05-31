@@ -323,7 +323,7 @@ exports.viewGradeResult = async (req, res) => {
 
 exports.viewGradeAttendance = async (req, res) => {
   try {
-    const gradeId = req.currentTeacher.teacherGradeIncharge;
+    const gradeId = req.currentTeacher?.teacherGrades?.[0]?.gradeId;
     if (!gradeId) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
