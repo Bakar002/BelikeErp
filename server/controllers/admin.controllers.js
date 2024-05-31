@@ -419,12 +419,7 @@ exports.addGrade = async (req, res) => {
         message: "Grade Courses are missing",
       });
     }
-    if (!gradeIncharge) {
-      return res.status(404).json({
-        statusCode: STATUS_CODES[404],
-        message: "Grade Incharge is missing",
-      });
-    }
+    
     if (!gradeSchoolTiming) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
