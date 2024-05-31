@@ -399,8 +399,8 @@ exports.addGrade = async (req, res) => {
       gradeRoomNumber,
       gradeCourses,
       gradeSchoolTiming,
-      gradeIncharge,
     } = req.body;
+    
     if (!gradeCategory) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
@@ -419,29 +419,13 @@ exports.addGrade = async (req, res) => {
         message: "Grade Courses are missing",
       });
     }
-    
     if (!gradeSchoolTiming) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
         message: "Grade School Timing is missing",
       });
     }
-    const isTeacherForInchargeExisted = await teacherModel.findOne({
-      _id: gradeIncharge,
-    });
-    if (!isTeacherForInchargeExisted) {
-      return res.status(404).json({
-        statusCode: STATUS_CODES[404],
-        message:
-          "Teacher is not existing into database to be the Grade Incharge",
-      });
-    }
-    if (isTeacherForInchargeExisted.teacherGradeIncharge) {
-      return res.status(409).json({
-        statusCode: STATUS_CODES[409],
-        message: `${isTeacherForInchargeExisted.teacherName} is already a grade incharge, please chose another one`,
-      });
-    }
+
     const isGradeCategoryExisted = await gradeModel.findOne({ gradeCategory });
     if (isGradeCategoryExisted) {
       return res.status(409).json({
@@ -449,15 +433,14 @@ exports.addGrade = async (req, res) => {
         message: "Grade Category must be unique",
       });
     }
+
     const newGrade = await new gradeModel({
       gradeCategory,
       gradeRoomNumber,
       gradeSchoolTiming,
       gradeCourses,
-      gradeIncharge,
     }).save();
-    isTeacherForInchargeExisted.teacherGradeIncharge = newGrade?._id;
-    await isTeacherForInchargeExisted.save();
+
     return res.status(201).json({
       statusCode: STATUS_CODES[201],
       message: `${newGrade.gradeCategory} is added successfully`,
@@ -469,6 +452,7 @@ exports.addGrade = async (req, res) => {
     });
   }
 };
+
 
 exports.addCourse = async (req, res) => {
   try {
