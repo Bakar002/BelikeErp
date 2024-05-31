@@ -347,7 +347,7 @@ exports.viewGradeAttendance = async (req, res) => {
 
 exports.loadAllStudentOnSameGradeIncharge = async (req, res) => {
   try {
-    const gradeId = req?.currentTeacher?.teacherGrade?.[0]?.gradeId;
+    const gradeId = req?.currentTeacher?.teacherGrades?.[0]?.gradeId;
     if (!gradeId) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
