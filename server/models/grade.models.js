@@ -25,10 +25,7 @@ const gradeSchema = mongoose.Schema(
     ],
     gradeRoomNumber: String,
     gradeSchoolTiming: String,
-    gradeIncharge: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Grade",
-    },
+   
   },
   { timestamps: true }
 );
