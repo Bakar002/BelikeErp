@@ -60,6 +60,10 @@ const teacherSchema = new mongoose.Schema({
   },
 });
 
+teacherSchema.index({ adminId: 1, teacherEmail: 1 }, { unique: true });
+teacherSchema.index({ adminId: 1, teacherIdCardNumber: 1 }, { unique: true });
+
+
 teacherSchema.pre("save", async function (next) {
   if (!this.isModified("teacherPassword")) return next();
   try {
