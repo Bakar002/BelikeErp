@@ -256,21 +256,25 @@ exports.addTeacher = async (req, res) => {
       });
     }
 
-    const isTeacherEmailExisted = await teacherModel.findOne({ teacherEmail });
+    const isTeacherEmailExisted = await teacherModel.findOne({
+      teacherEmail,
+      adminId,
+    });
     if (isTeacherEmailExisted) {
       return res.status(409).json({
         statusCode: STATUS_CODES[409],
-        message: "Teacher email already exists",
+        message: "Teacher email already exists for this admin",
       });
     }
 
     const isTeacherIdCardNumberExisted = await teacherModel.findOne({
       teacherIdCardNumber,
+      adminId,
     });
     if (isTeacherIdCardNumberExisted) {
       return res.status(409).json({
         statusCode: STATUS_CODES[409],
-        message: "Teacher ID card number already exists",
+        message: "Teacher ID card number already exists for this admin",
       });
     }
 
