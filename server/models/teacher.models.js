@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const teacherSchema = mongoose.Schema({
+
+const teacherSchema = new mongoose.Schema({
   teacherName: {
     type: String,
     required: [true, "Teacher Name is required"],
@@ -40,7 +41,7 @@ const teacherSchema = mongoose.Schema({
   },
   teacherIdCardNumber: {
     type: String,
-    unique: [true, "Student Id Card number must be unique"],
+    unique: [true, "Teacher Id Card number must be unique"],
   },
   teacherIdCardCopy: {
     type: String,
@@ -51,6 +52,11 @@ const teacherSchema = mongoose.Schema({
   teacherGradeIncharge: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Grade",
+  },
+  adminId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Admin",
+    required: true, // Ensure that adminId is always provided
   },
 });
 
@@ -63,6 +69,7 @@ teacherSchema.pre("save", async function (next) {
     next(error);
   }
 });
+
 const teacherModel = mongoose.model("Teacher", teacherSchema);
 
 module.exports = teacherModel;
