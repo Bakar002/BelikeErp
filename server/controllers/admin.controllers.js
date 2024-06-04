@@ -241,6 +241,8 @@ exports.addTeacher = async (req, res) => {
       teacherGrades,
     } = req.body;
     let files = req.files;
+    const adminId = req.currentAdmin._id; // Extract admin ID from the request
+
     if (
       !teacherName ||
       !teacherEmail ||
@@ -253,6 +255,7 @@ exports.addTeacher = async (req, res) => {
         message: "One or more required fields are missing",
       });
     }
+
     const isTeacherEmailExisted = await teacherModel.findOne({ teacherEmail });
     if (isTeacherEmailExisted) {
       return res.status(409).json({
@@ -260,6 +263,7 @@ exports.addTeacher = async (req, res) => {
         message: "Teacher email already exists",
       });
     }
+
     const isTeacherIdCardNumberExisted = await teacherModel.findOne({
       teacherIdCardNumber,
     });
@@ -269,6 +273,7 @@ exports.addTeacher = async (req, res) => {
         message: "Teacher ID card number already exists",
       });
     }
+
     let teacherAvatar = null;
     let teacherIdCardCopy = null;
     if (files["teacherAvatar"] && files["teacherAvatar"].length > 0) {
@@ -277,6 +282,7 @@ exports.addTeacher = async (req, res) => {
     if (files["teacherIdCardCopy"] && files["teacherIdCardCopy"].length > 0) {
       teacherIdCardCopy = files["teacherIdCardCopy"][0];
     }
+
     if (teacherAvatar) {
       const teacherAvatarURI = getImageUri(teacherAvatar);
       const teacherAvatarUpload = await cloudinary.uploader.upload(
@@ -284,6 +290,7 @@ exports.addTeacher = async (req, res) => {
       );
       teacherAvatar = teacherAvatarUpload.url;
     }
+
     if (teacherIdCardCopy) {
       const teacherIdCardCopyURI = getImageUri(teacherIdCardCopy);
       const teacherIdCardCopyUpload = await cloudinary.uploader.upload(
@@ -291,6 +298,7 @@ exports.addTeacher = async (req, res) => {
       );
       teacherIdCardCopy = teacherIdCardCopyUpload.url;
     }
+
     const newTeacher = await teacherModel.create({
       teacherName,
       teacherEmail,
@@ -302,7 +310,9 @@ exports.addTeacher = async (req, res) => {
       teacherCourses,
       teacherGrades,
       teacherJobDate,
+      adminId // Include the admin ID in the teacher data
     });
+
     return res.status(201).json({
       statusCode: STATUS_CODES[201],
       message: `${newTeacher.teacherName} added successfully`,
