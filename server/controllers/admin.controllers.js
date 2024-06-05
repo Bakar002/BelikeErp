@@ -530,11 +530,12 @@ exports.addCourse = async (req, res) => {
 
 exports.loadAllStudents = async (req, res) => {
   try {
-    const students = await studentModel.find();
+    const adminId = req.currentAdmin._id;
+    const students = await studentModel.find({ adminId });
     if (students.length === 0) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
-        message: "No student existed into database",
+        message: "No students exist in the database for this admin",
       });
     }
     return res.status(200).json({
@@ -548,13 +549,15 @@ exports.loadAllStudents = async (req, res) => {
     });
   }
 };
+
 exports.loadAllTeachers = async (req, res) => {
   try {
-    const teachers = await teacherModel.find();
+    const adminId = req.currentAdmin._id;
+    const teachers = await teacherModel.find({ adminId });
     if (teachers.length === 0) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
-        message: "No teacher existed into database",
+        message: "No teachers exist in the database for this admin",
       });
     }
     return res.status(200).json({
@@ -568,6 +571,7 @@ exports.loadAllTeachers = async (req, res) => {
     });
   }
 };
+
 
 exports.loadCurrentAdmin = async (req, res) => {
   try {
@@ -678,7 +682,8 @@ exports.viewGradeAttendance = async (req, res) => {
 
 exports.loadAllGrades = async (req, res) => {
   try {
-    const grades = await gradeModel.find();
+    const adminId = req.currentAdmin._id;
+    const grades = await gradeModel.find({ adminId });
     return res.status(200).json({
       statusCode: STATUS_CODES[200],
       grades,
@@ -691,12 +696,13 @@ exports.loadAllGrades = async (req, res) => {
   }
 };
 
-exports.loadAllCourses = async (req, res) => {
+exports.loadAllStudents = async (req, res) => {
   try {
-    const courses = await courseModel.find();
+    const adminId = req.currentAdmin._id;
+    const students = await studentModel.find({ adminId });
     return res.status(200).json({
       statusCode: STATUS_CODES[200],
-      courses,
+      students,
     });
   } catch (error) {
     return res.status(500).json({
@@ -705,6 +711,7 @@ exports.loadAllCourses = async (req, res) => {
     });
   }
 };
+
 
 exports.loadAllStudents = async (req, res) => {
   try {
