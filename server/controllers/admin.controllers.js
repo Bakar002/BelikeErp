@@ -334,6 +334,8 @@ exports.addTeacherCourses = async (req, res) => {
   try {
     const teacherId = req?.params?.teacher_id;
     const { teacherCourses } = req?.body;
+    const adminId = req.currentAdmin._id;
+
     if (!teacherId) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
@@ -346,7 +348,7 @@ exports.addTeacherCourses = async (req, res) => {
         message: "Teacher courses are missing",
       });
     }
-    const teacher = await teacherModel.findOne({ _id: teacherId });
+    const teacher = await teacherModel.findOne({ _id: teacherId, adminId });
     if (!teacher) {
       return res.status(401).json({
         statusCode: STATUS_CODES[404],
@@ -372,6 +374,8 @@ exports.addTeacherGrades = async (req, res) => {
   try {
     const teacherId = req?.params?.teacher_id;
     const { teacherGrades } = req?.body;
+    const adminId = req.currentAdmin._id;
+
     if (!teacherId) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
@@ -384,7 +388,7 @@ exports.addTeacherGrades = async (req, res) => {
         message: "Teacher grades are missing",
       });
     }
-    const teacher = await teacherModel.findOne({ _id: teacherId });
+    const teacher = await teacherModel.findOne({ _id: teacherId, adminId });
     if (!teacher) {
       return res.status(401).json({
         statusCode: STATUS_CODES[404],
@@ -414,7 +418,8 @@ exports.addGrade = async (req, res) => {
       gradeCourses,
       gradeSchoolTiming,
     } = req.body;
-    
+    const adminId = req.currentAdmin._id;
+
     if (!gradeCategory) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
@@ -440,7 +445,7 @@ exports.addGrade = async (req, res) => {
       });
     }
 
-    const isGradeCategoryExisted = await gradeModel.findOne({ gradeCategory });
+    const isGradeCategoryExisted = await gradeModel.findOne({ gradeCategory, adminId });
     if (isGradeCategoryExisted) {
       return res.status(409).json({
         statusCode: STATUS_CODES[409],
@@ -453,6 +458,7 @@ exports.addGrade = async (req, res) => {
       gradeRoomNumber,
       gradeSchoolTiming,
       gradeCourses,
+      adminId,
     }).save();
 
     return res.status(201).json({
@@ -467,11 +473,12 @@ exports.addGrade = async (req, res) => {
   }
 };
 
-
 exports.addCourse = async (req, res) => {
   try {
     const { courseTitle, courseTimeTable } = req.body;
     const courseTeacher = req?.params?.teacher_id;
+    const adminId = req.currentAdmin._id;
+
     if (!courseTeacher) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
@@ -484,7 +491,7 @@ exports.addCourse = async (req, res) => {
         message: "Course Title is missing",
       });
     }
-    const isCourseTitleExisted = await courseModel.findOne({ courseTitle });
+    const isCourseTitleExisted = await courseModel.findOne({ courseTitle, adminId });
     if (isCourseTitleExisted) {
       return res.status(409).json({
         statusCode: STATUS_CODES[409],
@@ -493,6 +500,7 @@ exports.addCourse = async (req, res) => {
     }
     const isCourseTeacherExisted = await teacherModel.findOne({
       _id: courseTeacher,
+      adminId,
     });
     if (!isCourseTeacherExisted) {
       return res.status(404).json({
@@ -504,6 +512,7 @@ exports.addCourse = async (req, res) => {
       courseTitle,
       courseTimeTable: courseTimeTable || "",
       courseTeacher,
+      adminId,
     }).save();
     isCourseTeacherExisted.teacherCourses.push(newCourse._id);
     await isCourseTeacherExisted.save();

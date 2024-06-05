@@ -15,9 +15,16 @@ const courseSchema = mongoose.Schema(
       ref: "Grade",
     },
     courseTimeTable: String,
+    adminId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      required: true,
+    },
   },
   { timestamps: true }
 );
+
+courseSchema.index({ adminId: 1, courseTitle: 1 }, { unique: true });
 
 const courseModel = mongoose.model("Course", courseSchema);
 

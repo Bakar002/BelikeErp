@@ -5,7 +5,6 @@ const gradeSchema = mongoose.Schema(
     gradeCategory: {
       type: String,
       required: [true, "Grade Category is required"],
-      unique: [true, "Grade Category must be unique"],
     },
     gradeCourses: [
       {
@@ -25,10 +24,16 @@ const gradeSchema = mongoose.Schema(
     ],
     gradeRoomNumber: String,
     gradeSchoolTiming: String,
-   
+    adminId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      required: true,
+    },
   },
   { timestamps: true }
 );
+
+gradeSchema.index({ adminId: 1, gradeCategory: 1 }, { unique: true });
 
 const gradeModel = mongoose.model("Grade", gradeSchema);
 
