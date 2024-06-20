@@ -101,6 +101,31 @@ return res.status(500).json({
 }
 };
 
+exports.createReceipt = async (req, res) => {
+  const { name, class: studentClass, fee, cnic, paymentMethod } = req.body;
+  const newReceipt = new Receipt({ name, class: studentClass, fee, cnic, paymentMethod });
+  try {
+    await newReceipt.save();
+    res.status(201).send(newReceipt);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+exports.getReceipts = async (req, res) => {
+  try {
+    const receipts = await Receipt.find();
+    res.status(200).send(receipts);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+
+
+
+
+
 
 exports.studentLogout = async (req, res) => {
   try {

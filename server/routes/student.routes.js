@@ -6,6 +6,8 @@ const {
   viewResult,
   submitFeedbacks,
   loadCurrentStudent,
+  createReceipt,
+  getReceipts
 } = require("../controllers/student.controllers");
 const isStudentAuthenticated = require("../middlewares/isStudentAuthenticated.middlewares");
 const Router = express.Router();
@@ -24,8 +26,21 @@ Router.route("/submit-feedback/:course_id").post(
   isStudentAuthenticated,
   submitFeedbacks
 );
+
+
 Router.route("/load-current-student").get(
   isStudentAuthenticated,
   loadCurrentStudent
 );
+Router.route("/receipts").post(
+  isStudentAuthenticated,
+  createReceipt
+);
+Router.route("/receipts").get(
+  isStudentAuthenticated,
+  getReceipts
+);
+
+
+
 module.exports = Router;
