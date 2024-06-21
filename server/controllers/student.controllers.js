@@ -7,6 +7,8 @@ const resultModel = require("../models/result.models");
 const feedbackResponseModel = require("../models/feedbackResponse.models");
 const teacherModel = require("../models/teacher.models");
 const feedbackModel = require("../models/feedback.models");
+const Receipt = require('../models/receipt.model');
+
 const gradeModel = require("../models/grade.models");
 const {
   startOfWeek,

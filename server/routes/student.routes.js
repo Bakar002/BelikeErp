@@ -33,12 +33,12 @@ Router.route("/load-current-student").get(
   loadCurrentStudent
 );
 Router.route("/receipts").post(
-
+  isStudentAuthenticated,
   createReceipt
 );
-Router.route("/getreceipts").get(
-
-  getReceipts
+Router.route("/get_receipts").get(
+  isStudentAuthenticated,
+    getReceipts
 );
 
 
