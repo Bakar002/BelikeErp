@@ -129,6 +129,7 @@ exports.addStudent = async (req, res) => {
       studentIdCardNumber,
       studentCourses,
     } = req.body;
+
     if (!studentName) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
@@ -144,7 +145,7 @@ exports.addStudent = async (req, res) => {
     if (!studentPassword) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
-        message: "Student Password is missing ",
+        message: "Student Password is missing",
       });
     }
     if (!studentId) {
@@ -165,24 +166,22 @@ exports.addStudent = async (req, res) => {
         message: "Student Courses are missing",
       });
     }
+
     const isStudentEmailExisted = await studentModel.findOne({ studentEmail });
-    const isStudentIdCardExisted = await studentModel.findOne({
-      studentIdCardNumber,
-    });
+    const isStudentIdCardExisted = await studentModel.findOne({ studentIdCardNumber });
     if (isStudentEmailExisted) {
       return res.status(409).json({
         statusCode: STATUS_CODES[409],
-        message:
-          "Student Email is already existed into database, please add unqiue email",
+        message: "Student Email already exists in the database, please add a unique email",
       });
     }
     if (isStudentIdCardExisted) {
       return res.status(409).json({
         statusCode: STATUS_CODES[409],
-        message:
-          "Student Id Card Number is already existed into database, please add unqiue studend id card",
+        message: "Student Id Card Number already exists in the database, please add a unique student id card",
       });
     }
+
     let studentAvatar = null;
     let studentIdCardCopy = null;
     if (files["studentAvatar"] && files["studentAvatar"].length > 0) {
@@ -191,21 +190,20 @@ exports.addStudent = async (req, res) => {
     if (files["studentIdCardCopy"] && files["studentIdCardCopy"].length > 0) {
       studentIdCardCopy = files["studentIdCardCopy"][0];
     }
+
     if (studentAvatar) {
       const studentAvatarURI = getImageUri(studentAvatar);
-      const studentAvatarUpload = await cloudinary.uploader.upload(
-        studentAvatarURI.content
-      );
+      const studentAvatarUpload = await cloudinary.uploader.upload(studentAvatarURI.content);
       studentAvatar = studentAvatarUpload.url;
     }
     if (studentIdCardCopy) {
       const studentIdCardCopyURI = getImageUri(studentIdCardCopy);
-      const studentIdCardCopyUpload = await cloudinary.uploader.upload(
-        studentIdCardCopyURI.content
-      );
+      const studentIdCardCopyUpload = await cloudinary.uploader.upload(studentIdCardCopyURI.content);
       studentIdCardCopy = studentIdCardCopyUpload.url;
     }
+
     let newStudent = await new studentModel({
+      adminId: req.currentAdmin._id,  // Add the admin ID here
       studentName,
       studentEmail,
       studentPassword,
@@ -216,6 +214,7 @@ exports.addStudent = async (req, res) => {
       studentAvatar: studentAvatar || "",
       studentIdCardCopy: studentIdCardCopy || "",
     }).save();
+
     return res.status(200).json({
       statusCode: STATUS_CODES[200],
       message: `${newStudent.studentName} is added successfully`,
@@ -729,20 +728,20 @@ exports.loadAllStudents = async (req, res) => {
 };
 
 
-exports.loadAllStudents = async (req, res) => {
-  try {
-    const students = await studentModel.find();
-    return res.status(200).json({
-      statusCode: STATUS_CODES[200],
-      students,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      statusCode: STATUS_CODES[500],
-      message: error.message,
-    });
-  }
-};
+// exports.loadAllStudents = async (req, res) => {
+//   try {
+//     const students = await studentModel.find();
+//     return res.status(200).json({
+//       statusCode: STATUS_CODES[200],
+//       students,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       statusCode: STATUS_CODES[500],
+//       message: error.message,
+//     });
+//   }
+// };
 
 exports.loadAllCoursesFeedbacks = async (req, res) => {
   try {
