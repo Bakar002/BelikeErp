@@ -696,6 +696,22 @@ exports.loadAllGrades = async (req, res) => {
   }
 };
 
+exports.loadAllCourses = async (req, res) => {
+  try {
+    const adminId = req.currentAdmin._id;
+    const courses = await courseModel.find({ adminId }).populate('courseTeacher').populate('courseGrade');
+    return res.status(200).json({
+      statusCode: STATUS_CODES[200],
+      courses,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      statusCode: STATUS_CODES[500],
+      message: error.message,
+    });
+  }
+};
+
 exports.loadAllStudents = async (req, res) => {
   try {
     const adminId = req.currentAdmin._id;
