@@ -475,7 +475,6 @@ exports.addGrade = async (req, res) => {
 exports.addCourse = async (req, res) => {
   try {
     const { courseTitle, courseTimeTable } = req.body;
-    const courseTeacher = req?.params?.teacher_id;
     const adminId = req.currentAdmin._id;
 
     if (!courseTitle) {
@@ -493,35 +492,11 @@ exports.addCourse = async (req, res) => {
       });
     }
 
-    let newCourse;
-    if (courseTeacher) {
-      const isCourseTeacherExisted = await teacherModel.findOne({
-        _id: courseTeacher,
-        adminId,
-      });
-      if (!isCourseTeacherExisted) {
-        return res.status(404).json({
-          statusCode: STATUS_CODES[404],
-          message: "Course Teacher not existed in the database",
-        });
-      }
-
-      newCourse = await new courseModel({
-        courseTitle,
-        courseTimeTable: courseTimeTable || "",
-        courseTeacher,
-        adminId,
-      }).save();
-
-      isCourseTeacherExisted.teacherCourses.push(newCourse._id);
-      await isCourseTeacherExisted.save();
-    } else {
-      newCourse = await new courseModel({
-        courseTitle,
-        courseTimeTable: courseTimeTable || "",
-        adminId,
-      }).save();
-    }
+    const newCourse = await new courseModel({
+      courseTitle,
+      courseTimeTable: courseTimeTable || "",
+      adminId,
+    }).save();
 
     return res.status(201).json({
       statusCode: STATUS_CODES[201],
