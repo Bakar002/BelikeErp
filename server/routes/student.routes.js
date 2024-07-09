@@ -10,11 +10,13 @@ const {
   getReceipts,
   createStudent
 } = require("../controllers/student.controllers");
+const multipleUpload = require("../middlewares/imageUpload.middlewares");
+
 const isStudentAuthenticated = require("../middlewares/isStudentAuthenticated.middlewares");
 const Router = express.Router();
 
 Router.route("/login").post(studentLogin);
-Router.route("/admissionsubmit").post(createStudent);
+Router.route("/admissionsubmit").post(multipleUpload,createStudent);
 Router.route("/logout").get(isStudentAuthenticated, studentLogout);
 Router.route("/view-attendance/:time_range").get(
   isStudentAuthenticated,
