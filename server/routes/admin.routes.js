@@ -43,7 +43,7 @@ Router.route("/add-teacher-grades/:teacher_id").post(
   addTeacherGrades
 );
 Router.route("/add-grade").post(isAdminAuthenticated, addGrade);
-Router.route("/add-course/:teacher_id").post(isAdminAuthenticated, addCourse);
+Router.route("/add-course").post(isAdminAuthenticated, addCourse);
 Router.route("/load-all-students").get(isAdminAuthenticated, loadAllStudents);
 Router.route("/load-all-teachers").get(isAdminAuthenticated, loadAllTeachers);
 Router.route("/load-current-admin").get(isAdminAuthenticated, loadCurrentAdmin);
