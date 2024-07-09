@@ -1,6 +1,11 @@
 const { STATUS_CODES } = require("http");
+const cloudinary = require("cloudinary");
+const AdmissionModel = require("../models/admission.models");
+
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const getImageUri = require("../config/imageURI.config");
+
 const studentModel = require("../models/student.models");
 const attendanceModel = require("../models/attendance.models");
 const resultModel = require("../models/result.models");
@@ -359,3 +364,64 @@ exports.loadCurrentStudent = async (req, res) => {
 //     });
 //   }
 // };
+exports.createStudent = async (req, res) => {
+  try {
+    const files = req.files || [];
+    
+    if (!req.body) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: "Req Body is empty or null",
+      });
+    }
+
+    const { 
+      studentName, studentEmail, studentPhone, studentDOB, 
+      studentAddress, guardianName, guardianPhone, studentClass, 
+      adminId 
+    } = req.body;
+
+    let studentIdPhoto = "";
+    let lastDegree = "";
+
+    if (files.length > 0) {
+      for (const file of files) {
+        const imageURI = getImageUri(file); // Ensure this function correctly processes the image
+        const imageUpload = await cloudinary.uploader.upload(imageURI.content);
+
+        if (file.fieldname === "studentIdPhoto") {
+          studentIdPhoto = imageUpload.url;
+        } else if (file.fieldname === "lastDegree") {
+          lastDegree = imageUpload.url;
+        }
+      }
+    }
+
+    const student = new AdmissionModel({
+      studentName,
+      studentEmail,
+      studentPhone,
+      studentDOB,
+      studentAddress,
+      guardianName,
+      guardianPhone,
+      studentClass,
+      studentIdPhoto,
+      lastDegree,
+      adminId,
+    });
+
+    await student.save();
+
+    return res.status(200).json({
+      statusCode: 200,
+      message: "Admisson Form Submitted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+};
+

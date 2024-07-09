@@ -19,6 +19,8 @@ const multipleUpload = multer({
   { name: "teacherIdCardCopy", maxCount: 1 },
   { name: "studentAvatar", maxCount: 1 },
   { name: "studentIdCardCopy", maxCount: 1 },
+  { name: 'studentIdPhoto', maxCount: 1 },
+   { name: 'lastDegree', maxCount: 1 }
 ]);
 
 module.exports = multipleUpload;
