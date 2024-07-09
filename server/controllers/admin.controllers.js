@@ -478,18 +478,13 @@ exports.addCourse = async (req, res) => {
     const courseTeacher = req?.params?.teacher_id;
     const adminId = req.currentAdmin._id;
 
-    if (!courseTeacher) {
-      return res.status(404).json({
-        statusCode: STATUS_CODES[404],
-        message: "Teacher Id is missing!",
-      });
-    }
     if (!courseTitle) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
         message: "Course Title is missing",
       });
     }
+
     const isCourseTitleExisted = await courseModel.findOne({ courseTitle, adminId });
     if (isCourseTitleExisted) {
       return res.status(409).json({
@@ -497,24 +492,37 @@ exports.addCourse = async (req, res) => {
         message: "Course Title must be unique",
       });
     }
-    const isCourseTeacherExisted = await teacherModel.findOne({
-      _id: courseTeacher,
-      adminId,
-    });
-    if (!isCourseTeacherExisted) {
-      return res.status(404).json({
-        statusCode: STATUS_CODES[404],
-        message: "Course Teacher not existed into database",
+
+    let newCourse;
+    if (courseTeacher) {
+      const isCourseTeacherExisted = await teacherModel.findOne({
+        _id: courseTeacher,
+        adminId,
       });
+      if (!isCourseTeacherExisted) {
+        return res.status(404).json({
+          statusCode: STATUS_CODES[404],
+          message: "Course Teacher not existed in the database",
+        });
+      }
+
+      newCourse = await new courseModel({
+        courseTitle,
+        courseTimeTable: courseTimeTable || "",
+        courseTeacher,
+        adminId,
+      }).save();
+
+      isCourseTeacherExisted.teacherCourses.push(newCourse._id);
+      await isCourseTeacherExisted.save();
+    } else {
+      newCourse = await new courseModel({
+        courseTitle,
+        courseTimeTable: courseTimeTable || "",
+        adminId,
+      }).save();
     }
-    const newCourse = await new courseModel({
-      courseTitle,
-      courseTimeTable: courseTimeTable || "",
-      courseTeacher,
-      adminId,
-    }).save();
-    isCourseTeacherExisted.teacherCourses.push(newCourse._id);
-    await isCourseTeacherExisted.save();
+
     return res.status(201).json({
       statusCode: STATUS_CODES[201],
       message: `Course with title ${newCourse.courseTitle} is added successfully`,
