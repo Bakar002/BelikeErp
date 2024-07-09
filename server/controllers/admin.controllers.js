@@ -745,14 +745,29 @@ exports.loadAllStudents = async (req, res) => {
 
 exports.loadAllCoursesFeedbacks = async (req, res) => {
   try {
+    const adminId = req.currentAdmin._id; // Get the admin ID
+
+    // Find courses that belong to the current admin
+    const courses = await courseModel.find({ adminId });
+    const courseIds = courses.map(course => course._id);
+
+    // Find feedbacks for the courses that belong to the admin
     const coursesFeedbacks = await feedbackModel
-      .find()
+      .find({ courseId: { $in: courseIds } })
       .populate("studentId")
       .populate("courseId")
       .populate({
         path: "courseId",
         populate: { path: "courseTeacher", model: teacherModel },
       });
+
+    if (coursesFeedbacks.length === 0) {
+      return res.status(404).json({
+        statusCode: STATUS_CODES[404],
+        message: "No course feedbacks found for this admin",
+      });
+    }
+
     res.status(200).json({
       statusCode: STATUS_CODES[200],
       coursesFeedbacks,
