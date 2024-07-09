@@ -18,6 +18,7 @@ const {
   loadAllGrades,
   loadAllCourses,
   loadAllCoursesFeedbacks,
+  getAdmissionsByAdmin
 
 } = require("../controllers/admin.controllers");
 const multipleUpload = require("../middlewares/imageUpload.middlewares");
@@ -37,6 +38,12 @@ Router.route("/add-teacher").post(
   multipleUpload,
   addTeacher
 );
+
+
+
+
+
+
 Router.route("/add-teacher-courses/:teacher_id").post(
   isAdminAuthenticated,
   addTeacherCourses
@@ -60,6 +67,8 @@ Router.route("/view-grade-attendance/:grade_id").get(
   viewGradeAttendance
 );
 Router.route("/load-all-grades").get(isAdminAuthenticated, loadAllGrades);
+Router.route("/load-all-admissions").get(isAdminAuthenticated,getAdmissionsByAdmin );
+
 Router.route("/load-all-students").get(isAdminAuthenticated, loadAllStudents);
  Router.route("/load-all-courses").get(isAdminAuthenticated, loadAllCourses);
 

@@ -5,6 +5,8 @@ const getImageUri = require("../config/imageURI.config");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const studentModel = require("../models/student.models");
+const AdmissionModel = require("../models/admission.models");
+
 const teacherModel = require("../models/teacher.models");
 const gradeModel = require("../models/grade.models");
 const courseModel = require("../models/course.models");
@@ -775,6 +777,25 @@ exports.loadAllCoursesFeedbacks = async (req, res) => {
     return res.status(500).json({
       statusCode: STATUS_CODES[500],
       message: error.message,
+    });
+  }
+};
+
+
+exports.getAdmissionsByAdmin = async (req, res) => {
+  try {
+    const adminId = req.currentAdmin._id; // Use authenticated admin ID
+    const admissions = await AdmissionModel.find({ adminId });
+    res.status(200).json({
+      statusCode: 200,
+      message: 'Admissions fetched successfully',
+      data: admissions,
+    });
+  } catch (error) {
+    console.error('Error in getAdmissionsByAdmin:', error);
+    res.status(500).json({
+      errorStatusCode: 500,
+      errorMessage: error.message,
     });
   }
 };
