@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   createAdmin,
+  getAllAdmins,
   adminLogin,
   addStudent,
   addTeacher,
@@ -17,12 +18,14 @@ const {
   loadAllGrades,
   loadAllCourses,
   loadAllCoursesFeedbacks,
+
 } = require("../controllers/admin.controllers");
 const multipleUpload = require("../middlewares/imageUpload.middlewares");
 const isAdminAuthenticated = require("../middlewares/isAdminAuthenticated.middlewares");
 const Router = express.Router();
 
 Router.route("/createadmin").post(multipleUpload, createAdmin);
+Router.route("/load-all-admins").get(getAllAdmins);
 Router.route("/login").post(adminLogin);
 Router.route("/add-student/:grade_id").post(
   isAdminAuthenticated,

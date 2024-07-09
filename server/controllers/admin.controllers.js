@@ -60,6 +60,22 @@ exports.createAdmin = async (req, res) => {
     });
   }
 };
+// Controller function to get all admins
+exports.getAllAdmins = async (req, res) => {
+  try {
+    const admins = await adminModel.find({}, '_id adminName'); // Fetch only the ID and name
+    return res.status(200).json({
+      statusCode: STATUS_CODES.OK,
+      message: "Admins fetched successfully",
+      data: admins,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      errorStatusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
+      errorMessage: error.message,
+    });
+  }
+};
 
 exports.adminLogin = async (req, res) => {
   try {
