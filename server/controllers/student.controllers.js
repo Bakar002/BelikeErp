@@ -380,24 +380,55 @@ exports.createStudent = async (req, res) => {
       studentAddress, guardianName, guardianPhone, studentClass, 
       adminId 
     } = req.body;
-
-    let studentIdPhoto = "";
-    let lastDegree = "";
-
-    if (files.length > 0) {
-      for (const file of files) {
-        const imageURI = getImageUri(file); // Ensure this function correctly processes the image
-        const imageUpload = await cloudinary.uploader.upload(imageURI.content);
-
-        if (file.fieldname === "studentIdPhoto") {
-          studentIdPhoto = imageUpload.url;
-        } else if (file.fieldname === "lastDegree") {
-          lastDegree = imageUpload.url;
-        }
-      }
+    let studentIdPhoto = null;
+    let lastDegree = null;
+    if (files["studentIdPhoto"] && files["studentIdPhoto"].length > 0) {
+      studentIdPhoto = files["studentIdPhoto"][0];
+    }
+    if (files["lastDegree"] && files["lastDegree"].length > 0) {
+      lastDegree = files["lastDegree"][0];
     }
 
-    const student = new AdmissionModel({
+    if (studentIdPhoto) {
+      const studentIdPhotoURI = getImageUri(studentIdPhoto);
+      const studentIdPhotoUpload = await cloudinary.uploader.upload(
+        studentIdPhotoURI.content
+      );
+      studentIdPhoto = studentIdPhotoUpload.url;
+    }
+
+    if (lastDegree) {
+      const lastDegreeURI = getImageUri(lastDegree);
+      const lastDegreeUpload = await cloudinary.uploader.upload(
+        lastDegreeURI.content
+      );
+      lastDegree = lastDegreeUpload.url;
+    }
+
+
+
+
+
+
+
+
+    // let studentIdPhoto = "";
+    // let lastDegree = "";
+
+    // if (files.length > 0) {
+    //   for (const file of files) {
+    //     const imageURI = getImageUri(file); // Ensure this function correctly processes the image
+    //     const imageUpload = await cloudinary.uploader.upload(imageURI.content);
+
+    //     if (file.fieldname === "studentIdPhoto") {
+    //       studentIdPhoto = imageUpload.url;
+    //     } else if (file.fieldname === "lastDegree") {
+    //       lastDegree = imageUpload.url;
+    //     }
+    //   }
+    // }
+
+    const student = await AdmissionModel.create({
       studentName,
       studentEmail,
       studentPhone,
@@ -411,7 +442,7 @@ exports.createStudent = async (req, res) => {
       adminId,
     });
 
-    await student.save();
+
 
     return res.status(200).json({
       statusCode: 200,
