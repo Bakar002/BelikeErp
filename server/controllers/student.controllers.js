@@ -367,7 +367,7 @@ exports.loadCurrentStudent = async (req, res) => {
 exports.createStudent = async (req, res) => {
   try {
     const files = req.files || [];
-    
+
     if (!req.body) {
       return res.status(404).json({
         statusCode: 404,
@@ -375,18 +375,24 @@ exports.createStudent = async (req, res) => {
       });
     }
 
-    const { 
-      studentName, studentEmail, studentPhone, studentDOB, 
-      studentAddress, guardianName, guardianPhone, studentClass, 
-      adminId 
+    const {
+      studentName, studentEmail, studentPhone, studentDOB,
+      studentAddress, guardianName, guardianPhone, studentClass,
+      adminId, paymentMethod
     } = req.body;
+
     let studentIdPhoto = null;
     let lastDegree = null;
+    let paymentSlip = null;
+
     if (files["studentIdPhoto"] && files["studentIdPhoto"].length > 0) {
       studentIdPhoto = files["studentIdPhoto"][0];
     }
     if (files["lastDegree"] && files["lastDegree"].length > 0) {
       lastDegree = files["lastDegree"][0];
+    }
+    if (files["paymentSlip"] && files["paymentSlip"].length > 0) {
+      paymentSlip = files["paymentSlip"][0];
     }
 
     if (studentIdPhoto) {
@@ -405,28 +411,13 @@ exports.createStudent = async (req, res) => {
       lastDegree = lastDegreeUpload.url;
     }
 
-
-
-
-
-
-
-
-    // let studentIdPhoto = "";
-    // let lastDegree = "";
-
-    // if (files.length > 0) {
-    //   for (const file of files) {
-    //     const imageURI = getImageUri(file); // Ensure this function correctly processes the image
-    //     const imageUpload = await cloudinary.uploader.upload(imageURI.content);
-
-    //     if (file.fieldname === "studentIdPhoto") {
-    //       studentIdPhoto = imageUpload.url;
-    //     } else if (file.fieldname === "lastDegree") {
-    //       lastDegree = imageUpload.url;
-    //     }
-    //   }
-    // }
+    if (paymentMethod === "online" && paymentSlip) {
+      const paymentSlipURI = getImageUri(paymentSlip);
+      const paymentSlipUpload = await cloudinary.uploader.upload(
+        paymentSlipURI.content
+      );
+      paymentSlip = paymentSlipUpload.url;
+    }
 
     const student = await AdmissionModel.create({
       studentName,
@@ -440,13 +431,13 @@ exports.createStudent = async (req, res) => {
       studentIdPhoto,
       lastDegree,
       adminId,
+      paymentMethod,
+      paymentSlip
     });
-
-
 
     return res.status(200).json({
       statusCode: 200,
-      message: "Admisson Form Submitted successfully",
+      message: "Admission Form Submitted successfully",
     });
   } catch (error) {
     res.status(500).json({
@@ -455,4 +446,3 @@ exports.createStudent = async (req, res) => {
     });
   }
 };
-

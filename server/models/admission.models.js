@@ -46,6 +46,13 @@ const AdmissionSchema = new mongoose.Schema({
     ref: "Admin",
     required: true,
   },
+  paymentMethod: {
+    type: String,
+    required: true,
+  },
+  paymentSlip: {
+    type: String,
+  },
 });
 
 const AdmissionModel = mongoose.model("Admission", AdmissionSchema);
