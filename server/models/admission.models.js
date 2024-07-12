@@ -52,6 +52,11 @@ const AdmissionSchema = new mongoose.Schema({
   },
   paymentSlip: {
     type: String,
+    default: null,
+  },
+  submissionDate: {
+    type: Date,
+    default: Date.now,
   },
 });
 

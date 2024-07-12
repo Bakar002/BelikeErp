@@ -367,7 +367,7 @@ exports.loadCurrentStudent = async (req, res) => {
 exports.createStudent = async (req, res) => {
   try {
     const files = req.files || [];
-
+    
     if (!req.body) {
       return res.status(404).json({
         statusCode: 404,
@@ -375,10 +375,10 @@ exports.createStudent = async (req, res) => {
       });
     }
 
-    const {
-      studentName, studentEmail, studentPhone, studentDOB,
-      studentAddress, guardianName, guardianPhone, studentClass,
-      adminId, paymentMethod
+    const { 
+      studentName, studentEmail, studentPhone, studentDOB, 
+      studentAddress, guardianName, guardianPhone, studentClass, 
+      adminId, paymentMethod 
     } = req.body;
 
     let studentIdPhoto = null;
@@ -432,7 +432,8 @@ exports.createStudent = async (req, res) => {
       lastDegree,
       adminId,
       paymentMethod,
-      paymentSlip
+      paymentSlip,
+      submissionDate: new Date()
     });
 
     return res.status(200).json({
