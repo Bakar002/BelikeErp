@@ -808,18 +808,18 @@ exports.getAdmissionsByAdmin = async (req, res) => {
 exports.createItStudent = async (req, res) => {
   try {
     const files = req.files || [];
-    
+
     if (!req.body) {
-      return res.status(404).json({
-        statusCode: 404,
-        message: "Req Body is empty or null",
+      return res.status(400).json({
+        statusCode: 400,
+        message: "Request body is empty or null",
       });
     }
 
     const { 
       studentName, studentEmail, studentPhone, studentDOB, 
       studentAddress, guardianName, guardianPhone, studentClass, 
-      paymentMethod, courses, duration 
+      course, duration, paymentMethod 
     } = req.body;
 
     let studentIdPhoto = null;
@@ -831,23 +831,20 @@ exports.createItStudent = async (req, res) => {
     if (files["paymentSlip"] && files["paymentSlip"].length > 0) {
       paymentSlip = files["paymentSlip"][0];
     }
+
     if (studentIdPhoto) {
       const studentIdPhotoURI = getImageUri(studentIdPhoto);
-      const studentIdPhotoUpload = await cloudinary.uploader.upload(
-        studentIdPhotoURI.content
-      );
+      const studentIdPhotoUpload = await cloudinary.uploader.upload(studentIdPhotoURI.content);
       studentIdPhoto = studentIdPhotoUpload.url;
     }
 
     if (paymentMethod === "online" && paymentSlip) {
       const paymentSlipURI = getImageUri(paymentSlip);
-      const paymentSlipUpload = await cloudinary.uploader.upload(
-        paymentSlipURI.content
-      );
+      const paymentSlipUpload = await cloudinary.uploader.upload(paymentSlipURI.content);
       paymentSlip = paymentSlipUpload.url;
     }
 
-    const adminId = '664a5ee70b568ab80ac19de7'; // Default admin ID
+
 
     const student = await ItStudent.create({
       studentName,
@@ -858,17 +855,19 @@ exports.createItStudent = async (req, res) => {
       guardianName,
       guardianPhone,
       studentClass,
+      course,
+      duration,
       studentIdPhoto,
       adminId,
       paymentMethod,
       paymentSlip,
-      submissionDate: new Date(),
-      courses: JSON.parse(courses).map(course => ({ name: course, duration }))
+      submissionDate: new Date()
     });
 
     return res.status(200).json({
       statusCode: 200,
       message: "Admission Form Submitted successfully",
+      student // Optionally return the created student object
     });
   } catch (error) {
     res.status(500).json({
@@ -876,14 +875,16 @@ exports.createItStudent = async (req, res) => {
       message: error.message,
     });
   }
-};
-
-exports.getItStudents = async (req, res) => {
+};exports.getItStudents = async (req, res) => {
   try {
-    const students = await ItStudent.find();
-    res.status(200).json(students);
+    const students = await ItStudent.find().populate('adminId'); // Optionally populate admin details
+    res.status(200).json({
+      statusCode: 200,
+      students
+    });
   } catch (error) {
     res.status(500).json({
+      statusCode: 500,
       message: error.message,
     });
   }
