@@ -394,7 +394,6 @@ exports.createStudent = async (req, res) => {
     if (files["paymentSlip"] && files["paymentSlip"].length > 0) {
       paymentSlip = files["paymentSlip"][0];
     }
-
     if (studentIdPhoto) {
       const studentIdPhotoURI = getImageUri(studentIdPhoto);
       const studentIdPhotoUpload = await cloudinary.uploader.upload(

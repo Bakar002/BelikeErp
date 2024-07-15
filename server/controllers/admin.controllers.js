@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const studentModel = require("../models/student.models");
 const AdmissionModel = require("../models/admission.models");
+const ItStudent = require('../models/ItStudent.models');
 
 const teacherModel = require("../models/teacher.models");
 const gradeModel = require("../models/grade.models");
@@ -796,6 +797,94 @@ exports.getAdmissionsByAdmin = async (req, res) => {
     res.status(500).json({
       errorStatusCode: 500,
       errorMessage: error.message,
+    });
+  }
+};
+
+
+
+
+
+exports.createItStudent = async (req, res) => {
+  try {
+    const files = req.files || [];
+    
+    if (!req.body) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: "Req Body is empty or null",
+      });
+    }
+
+    const { 
+      studentName, studentEmail, studentPhone, studentDOB, 
+      studentAddress, guardianName, guardianPhone, studentClass, 
+      paymentMethod, courses, duration 
+    } = req.body;
+
+    let studentIdPhoto = null;
+    let paymentSlip = null;
+
+    if (files["studentIdPhoto"] && files["studentIdPhoto"].length > 0) {
+      studentIdPhoto = files["studentIdPhoto"][0];
+    }
+    if (files["paymentSlip"] && files["paymentSlip"].length > 0) {
+      paymentSlip = files["paymentSlip"][0];
+    }
+    if (studentIdPhoto) {
+      const studentIdPhotoURI = getImageUri(studentIdPhoto);
+      const studentIdPhotoUpload = await cloudinary.uploader.upload(
+        studentIdPhotoURI.content
+      );
+      studentIdPhoto = studentIdPhotoUpload.url;
+    }
+
+    if (paymentMethod === "online" && paymentSlip) {
+      const paymentSlipURI = getImageUri(paymentSlip);
+      const paymentSlipUpload = await cloudinary.uploader.upload(
+        paymentSlipURI.content
+      );
+      paymentSlip = paymentSlipUpload.url;
+    }
+
+    const adminId = '664a5ee70b568ab80ac19de7'; // Default admin ID
+
+    const student = await ItStudent.create({
+      studentName,
+      studentEmail,
+      studentPhone,
+      studentDOB,
+      studentAddress,
+      guardianName,
+      guardianPhone,
+      studentClass,
+      studentIdPhoto,
+      adminId,
+      paymentMethod,
+      paymentSlip,
+      submissionDate: new Date(),
+      courses: JSON.parse(courses).map(course => ({ name: course, duration }))
+    });
+
+    return res.status(200).json({
+      statusCode: 200,
+      message: "Admission Form Submitted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+};
+
+exports.getItStudents = async (req, res) => {
+  try {
+    const students = await ItStudent.find();
+    res.status(200).json(students);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
     });
   }
 };
