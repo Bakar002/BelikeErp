@@ -889,3 +889,21 @@ exports.createItStudent = async (req, res) => {
     });
   }
 };
+
+exports.getItStudents = async (req, res) => {
+  try {
+    const adminId = req.currentAdmin._id; // Use authenticated admin ID
+    const admissions = await ItStudent.find({ adminId });
+    res.status(200).json({
+      statusCode: 200,
+      message: 'Admissions fetched successfully',
+      data: admissions,
+    });
+  } catch (error) {
+    console.error('Error in getAdmissionsByAdmin:', error);
+    res.status(500).json({
+      errorStatusCode: 500,
+      errorMessage: error.message,
+    });
+  }
+};
