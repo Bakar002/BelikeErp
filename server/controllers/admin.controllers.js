@@ -817,7 +817,7 @@ exports.createItStudent = async (req, res) => {
     }
 
     const { 
-      studentName, studentEmail, studentPhone, studentDOB, 
+      studentName, studentEmail, studentPhone, studentDOB, adminId,
       studentAddress, guardianName, guardianPhone, studentClass, 
       course, duration, paymentMethod 
     } = req.body;
