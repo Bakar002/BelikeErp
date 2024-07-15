@@ -875,20 +875,8 @@ exports.createItStudent = async (req, res) => {
       message: error.message,
     });
   }
-};exports.getItStudents = async (req, res) => {
-  try {
-    const students = await ItStudent.find().populate('adminId'); // Optionally populate admin details
-    res.status(200).json({
-      statusCode: 200,
-      students
-    });
-  } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: error.message,
-    });
-  }
 };
+
 
 exports.getItStudents = async (req, res) => {
   try {
