@@ -1,6 +1,6 @@
 const studentModel = require("../models/student.models");
 const attendanceModel = require("../models/attendance.models");
-const Task = require('../models/Task');
+const Task = require('../models/taks.models');
 
 const scheduleDeletion = require('../middlewares/scheduleDeletion');
 
