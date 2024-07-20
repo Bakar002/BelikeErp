@@ -22,6 +22,7 @@ const multipleUpload = multer({
   { name: 'studentIdPhoto', maxCount: 1 },
    { name: 'lastDegree', maxCount: 1 },
    { name: "paymentSlip", maxCount: 1 },
+   { name: 'image', maxCount: 1 }
 
 ]);
 

@@ -9,7 +9,10 @@ const {
   viewGradeAttendance,
   loadAllStudentOnSameGradeIncharge,
   loadStudentsOfGrade,
+  createTask,
 } = require("../controllers/teacher.controllers");
+const multipleUpload = require("../middlewares/imageUpload.middlewares");
+
 const isTeacherAuthenticated = require("../middlewares/isTeacherAuthenticated");
 
 const Router = express.Router();
@@ -49,4 +52,9 @@ Router.route("/load-students-with-grade/:grade_id").get(
   isTeacherAuthenticated,
   loadStudentsOfGrade
 );
+
+Router.route("/tasks").post(multipleUpload,createTask);
+
+
+
 module.exports = Router;

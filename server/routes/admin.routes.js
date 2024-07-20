@@ -29,7 +29,7 @@ const Router = express.Router();
 Router.route("/createadmin").post(multipleUpload, createAdmin);
 Router.route("/createItStudent").post(multipleUpload,createItStudent);
 Router.route("/getItStudent").get(  isAdminAuthenticated,
-  getItStudents);
+getItStudents);
 
 
 

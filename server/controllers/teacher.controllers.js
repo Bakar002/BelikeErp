@@ -1,5 +1,9 @@
 const studentModel = require("../models/student.models");
 const attendanceModel = require("../models/attendance.models");
+const Task = require('../models/Task');
+
+const scheduleDeletion = require('../middlewares/scheduleDeletion');
+
 const { STATUS_CODES } = require("http");
 const teacherModel = require("../models/teacher.models");
 const bcrypt = require("bcrypt");
@@ -395,5 +399,52 @@ exports.loadStudentsOfGrade = async (req, res) => {
       statusCode: STATUS_CODES[500],
       message: error.message,
     });
+  }
+};
+
+
+exports.createTask = async (req, res) => {
+  try {
+      const files = req.files || [];
+      const { teacherName, course, grade, description, time } = req.body;
+
+      if (!teacherName || !course || !grade || !description || !time) {
+          return res.status(400).json({
+              statusCode: 400,
+              message: "Required fields are missing",
+          });
+      }
+
+      let image = null;
+
+      if (files["image"] && files["image"].length > 0) {
+          image = files["image"][0];
+          const imageURI = getImageUri(image);
+          const imageUpload = await cloudinary.uploader.upload(imageURI.content);
+          image = imageUpload.url;
+      }
+
+      const task = await Task.create({
+          teacherName,
+          course,
+          grade,
+          description,
+          image,
+          time: new Date(time), // Convert time to Date object
+      });
+
+      // Schedule deletion of the task
+      scheduleDeletion(task._id, new Date(time));
+
+      return res.status(200).json({
+          statusCode: 200,
+          message: "Task created successfully",
+          task
+      });
+  } catch (error) {
+      res.status(500).json({
+          statusCode: 500,
+          message: error.message,
+      });
   }
 };
