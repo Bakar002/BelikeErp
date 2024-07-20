@@ -1,6 +1,8 @@
 const studentModel = require("../models/student.models");
 const attendanceModel = require("../models/attendance.models");
 const Task = require("../models/tasks.models");
+const cloudinary = require("cloudinary");
+
 const scheduleDeletion = require('../middlewares/scheduleDeletion');
 const { STATUS_CODES } = require("http");
 const teacherModel = require("../models/teacher.models");
