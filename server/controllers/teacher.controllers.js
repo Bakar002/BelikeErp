@@ -8,6 +8,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const testModel = require("../models/test.models");
 const resultModel = require("../models/result.models");
+const getImageUri = require("../config/imageURI.config");
+
 require("dotenv").config();
 exports.teacherLogin = async (req, res) => {
   try {
