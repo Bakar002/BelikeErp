@@ -73,11 +73,11 @@ Router.route("/view-grade-attendance/:grade_id").get(
   isAdminAuthenticated,
   viewGradeAttendance
 );
-Router.route("/load-all-grades").get(isAdminAuthenticated, loadAllGrades);
+Router.route("/load-all-grades").get( loadAllGrades);
 Router.route("/load-all-admissions").get(isAdminAuthenticated,getAdmissionsByAdmin );
 
 Router.route("/load-all-students").get(isAdminAuthenticated, loadAllStudents);
- Router.route("/load-all-courses").get(isAdminAuthenticated, loadAllCourses);
+ Router.route("/load-all-courses").get( loadAllCourses);
 
 Router.route("/load-all-courses-feedbacks").get(
   isAdminAuthenticated,
