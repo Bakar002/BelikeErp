@@ -1,6 +1,6 @@
 // utils/scheduleDeletion.js
 const cron = require('node-cron');
-const Task = require('../models/Task');
+const Task = require('../models/tasks.models');
 
 // Schedule a cron job to run every minute
 cron.schedule('* * * * *', async () => {
