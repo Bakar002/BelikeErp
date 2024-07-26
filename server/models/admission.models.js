@@ -7,7 +7,7 @@ const AdmissionSchema = new mongoose.Schema({
   },
   studentEmail: {
     type: String,
-    required: true,
+
   },
   studentPhone: {
     type: String,
@@ -15,11 +15,11 @@ const AdmissionSchema = new mongoose.Schema({
   },
   studentDOB: {
     type: Date,
-    required: true,
+
   },
   studentAddress: {
     type: String,
-    required: true,
+
   },
   guardianName: {
     type: String,
