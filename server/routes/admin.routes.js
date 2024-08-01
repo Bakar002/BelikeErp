@@ -21,6 +21,8 @@ const {
   getAdmissionsByAdmin,
   getItStudents,
   createItStudent,
+  deleteTeacher,
+  updateTeacher,
 } = require("../controllers/admin.controllers");
 const multipleUpload = require("../middlewares/imageUpload.middlewares");
 const isAdminAuthenticated = require("../middlewares/isAdminAuthenticated.middlewares");
@@ -63,6 +65,12 @@ Router.route("/add-grade").post(isAdminAuthenticated, addGrade);
 Router.route("/add-course").post(isAdminAuthenticated, addCourse);
 Router.route("/load-all-students").get(isAdminAuthenticated, loadAllStudents);
 Router.route("/load-all-teachers").get(isAdminAuthenticated, loadAllTeachers);
+Router.route("/delete-teacher").get(isAdminAuthenticated, deleteTeacher);
+Router.route("/update-teacher").get(isAdminAuthenticated, updateTeacher);
+
+
+
+
 Router.route("/load-current-admin").get(isAdminAuthenticated, loadCurrentAdmin);
 Router.route("/logout").get(isAdminAuthenticated, adminLogout);
 Router.route("/view-grade-result/:grade_id").get(

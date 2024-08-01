@@ -895,3 +895,108 @@ exports.getItStudents = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+//  Teacher update and delete
+exports.deleteTeacher = async (req, res) => {
+  try {
+    const { teacherId } = req.params;
+    const adminId = req.currentAdmin._id; // Extract admin ID from the request
+
+    const teacher = await teacherModel.findOneAndDelete({ _id: teacherId, adminId });
+
+    if (!teacher) {
+      return res.status(404).json({
+        statusCode: STATUS_CODES[404],
+        message: "Teacher not found",
+      });
+    }
+
+    return res.status(200).json({
+      statusCode: STATUS_CODES[200],
+      message: `${teacher.teacherName} deleted successfully`,
+    });
+  } catch (error) {
+    console.error("Error deleting teacher:", error);
+    return res.status(500).json({
+      statusCode: STATUS_CODES[500],
+      message: error.message,
+    });
+  }
+};
+exports.updateTeacher = async (req, res) => {
+  try {
+    const { teacherId } = req.params;
+    const {
+      teacherName,
+      teacherEmail,
+      teacherSalary,
+      teacherIdCardNumber,
+      teacherJobDate,
+      teacherCourses,
+      teacherGrades,
+    } = req.body;
+    const files = req.files;
+    const adminId = req.currentAdmin._id; // Extract admin ID from the request
+
+    let teacherAvatar = null;
+    let teacherIdCardCopy = null;
+    if (files && files["teacherAvatar"] && files["teacherAvatar"].length > 0) {
+      teacherAvatar = files["teacherAvatar"][0];
+    }
+    if (files && files["teacherIdCardCopy"] && files["teacherIdCardCopy"].length > 0) {
+      teacherIdCardCopy = files["teacherIdCardCopy"][0];
+    }
+
+    if (teacherAvatar) {
+      const teacherAvatarURI = getImageUri(teacherAvatar);
+      const teacherAvatarUpload = await cloudinary.uploader.upload(teacherAvatarURI.content);
+      teacherAvatar = teacherAvatarUpload.url;
+    }
+
+    if (teacherIdCardCopy) {
+      const teacherIdCardCopyURI = getImageUri(teacherIdCardCopy);
+      const teacherIdCardCopyUpload = await cloudinary.uploader.upload(teacherIdCardCopyURI.content);
+      teacherIdCardCopy = teacherIdCardCopyUpload.url;
+    }
+
+    const updatedTeacher = await teacherModel.findOneAndUpdate(
+      { _id: teacherId, adminId },
+      {
+        teacherName,
+        teacherEmail,
+        teacherSalary,
+        teacherIdCardNumber,
+        teacherJobDate,
+        teacherCourses,
+        teacherGrades,
+        ...(teacherAvatar && { teacherAvatar }),
+        ...(teacherIdCardCopy && { teacherIdCardCopy }),
+      },
+      { new: true }
+    );
+
+    if (!updatedTeacher) {
+      return res.status(404).json({
+        statusCode: STATUS_CODES[404],
+        message: "Teacher not found",
+      });
+    }
+
+    return res.status(200).json({
+      statusCode: STATUS_CODES[200],
+      message: `${updatedTeacher.teacherName} updated successfully`,
+      data: updatedTeacher,
+    });
+  } catch (error) {
+    console.error("Error updating teacher:", error);
+    return res.status(500).json({
+      statusCode: STATUS_CODES[500],
+      message: error.message,
+    });
+  }
+};
