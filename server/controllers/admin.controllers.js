@@ -907,7 +907,7 @@ exports.deleteTeacher = async (req, res) => {
     const { teacherId } = req.params;
     const adminId = req.currentAdmin._id; // Extract admin ID from the request
 
-    const teacher = await teacherModel.findOneAndDelete({ _id: teacherId, adminId });
+    const teacher = await teacherModel.findOneAndDelete({ _id: teacherId });
 
     if (!teacher) {
       return res.status(404).json({
