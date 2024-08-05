@@ -904,7 +904,8 @@ exports.getItStudents = async (req, res) => {
 exports.deleteTeacher = async (req, res) => {
   try {
     const { teacherId } = req.params;
-    console.log(req.params)
+
+
 
 
     const teacher = await teacherModel.findOneAndDelete({ _id: teacherId });
@@ -912,7 +913,7 @@ exports.deleteTeacher = async (req, res) => {
     if (!teacher) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
-        message: "Teacher not found",
+        message: teacher,
       });
     }
 
