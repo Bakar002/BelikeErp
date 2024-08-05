@@ -67,7 +67,7 @@ Router.route("/load-all-students").get(isAdminAuthenticated, loadAllStudents);
 Router.route("/load-all-teachers").get(isAdminAuthenticated, loadAllTeachers);
 Router.route("/delete-teacher/:teacherId").delete(isAdminAuthenticated, deleteTeacher);
 
-Router.route("/update-teacher/:id").put(isAdminAuthenticated, updateTeacher);
+Router.route("/update-teacher/:teacherId").put(isAdminAuthenticated, updateTeacher);
 
 
 
