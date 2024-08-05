@@ -913,7 +913,8 @@ exports.deleteTeacher = async (req, res) => {
     if (!teacher) {
       return res.status(404).json({
         statusCode: STATUS_CODES[404],
-        message: teacher,
+        message: "Teacher not found",
+        data:teacher
       });
     }
 
