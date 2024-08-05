@@ -56,7 +56,7 @@ const teacherSchema = new mongoose.Schema({
   adminId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Admin",
-    required: true, // Ensure that adminId is always provided
+
   },
 });
 
