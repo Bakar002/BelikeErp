@@ -65,7 +65,8 @@ Router.route("/add-grade").post(isAdminAuthenticated, addGrade);
 Router.route("/add-course").post(isAdminAuthenticated, addCourse);
 Router.route("/load-all-students").get(isAdminAuthenticated, loadAllStudents);
 Router.route("/load-all-teachers").get(isAdminAuthenticated, loadAllTeachers);
-Router.route("/delete-teacher/:id").delete(isAdminAuthenticated, deleteTeacher);
+Router.route("/delete-teacher/:teacherId").delete(isAdminAuthenticated, deleteTeacher);
+
 Router.route("/update-teacher/:id").put(isAdminAuthenticated, updateTeacher);
 
 
