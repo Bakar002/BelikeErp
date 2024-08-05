@@ -266,7 +266,7 @@ exports.addTeacher = async (req, res) => {
       !teacherEmail ||
       !teacherPassword ||
       !teacherIdCardNumber ||
-      !teacherSalary
+
     ) {
       return res.status(400).json({
         statusCode: STATUS_CODES[400],
