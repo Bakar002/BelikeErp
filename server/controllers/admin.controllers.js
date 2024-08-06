@@ -173,18 +173,18 @@ exports.addStudent = async (req, res) => {
         message: "Student Id is missing",
       });
     }
-    if (!studentGrade) {
-      return res.status(404).json({
-        statusCode: STATUS_CODES[404],
-        message: "Student Grade is missing",
-      });
-    }
-    if (!studentCourses || studentCourses.length === 0) {
-      return res.status(404).json({
-        statusCode: STATUS_CODES[404],
-        message: "Student Courses are missing",
-      });
-    }
+    // if (!studentGrade) {
+    //   return res.status(404).json({
+    //     statusCode: STATUS_CODES[404],
+    //     message: "Student Grade is missing",
+    //   });
+    // }
+    // if (!studentCourses || studentCourses.length === 0) {
+    //   return res.status(404).json({
+    //     statusCode: STATUS_CODES[404],
+    //     message: "Student Courses are missing",
+    //   });
+    // }
 
     const isStudentEmailExisted = await studentModel.findOne({ studentEmail });
     const isStudentIdCardExisted = await studentModel.findOne({ studentIdCardNumber });
