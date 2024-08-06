@@ -146,6 +146,8 @@ exports.addStudent = async (req, res) => {
       studentPassword,
       studentId,
       studentIdCardNumber,
+
+
       studentCourses,
     } = req.body;
 
