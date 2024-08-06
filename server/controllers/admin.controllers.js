@@ -1004,3 +1004,35 @@ exports.updateTeacher = async (req, res) => {
     });
   }
 };
+
+
+
+exports.deleteStudent = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+
+
+
+
+    const student = await studentModel.findOneAndDelete({ _id: studentId });
+
+    if (!student) {
+      return res.status(404).json({
+        statusCode: STATUS_CODES[404],
+        message: "STUDENT not found",
+        data:teacher
+      });
+    }
+
+    return res.status(200).json({
+      statusCode: STATUS_CODES[200],
+      message: `${student.studentName} deleted successfully`,
+    });
+  } catch (error) {
+    console.error("Error deleting student:", error);
+    return res.status(500).json({
+      statusCode: STATUS_CODES[500],
+      message: error.message,
+    });
+  }
+};
