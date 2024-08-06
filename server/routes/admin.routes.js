@@ -23,6 +23,7 @@ const {
   createItStudent,
   deleteTeacher,
   updateTeacher,
+  deleteStudent
 } = require("../controllers/admin.controllers");
 const multipleUpload = require("../middlewares/imageUpload.middlewares");
 const isAdminAuthenticated = require("../middlewares/isAdminAuthenticated.middlewares");
