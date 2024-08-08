@@ -122,12 +122,12 @@ exports.deleteAdmin = async (req, res) => {
 exports.updateAdmin = async (req, res) => {
   try {
     const { adminId } = req.params;
-    const files = req.files || [];
+    const files = req.files;
 
     if (!req.body) {
-      return res.status(404).json({
-        statusCode: STATUS_CODES.NOT_FOUND,
-        message: "Req Body is empty or null",
+      return res.status(400).json({
+        statusCode: STATUS_CODES.BAD_REQUEST,
+        message: "Request body is empty or null",
       });
     }
 
@@ -154,12 +154,16 @@ exports.updateAdmin = async (req, res) => {
       updatedData.adminPassword = hashedPassword;
     }
 
-    // Handle file upload if there are any files
-    if (files.length > 0) {
-      const image = files[0];
-      const imageURI = getImageUri(image); // Ensure this function correctly processes the image
-      const imageUpload = await cloudinary.uploader.upload(imageURI.content);
-      updatedData.adminAvatar = imageUpload.url;
+    // Handle file upload for admin avatar
+    let adminAvatar = null;
+    if (files && files["adminAvatar"] && files["adminAvatar"].length > 0) {
+      adminAvatar = files["adminAvatar"][0];
+    }
+
+    if (adminAvatar) {
+      const adminAvatarURI = getImageUri(adminAvatar); // Ensure this function correctly processes the image
+      const adminAvatarUpload = await cloudinary.uploader.upload(adminAvatarURI.content);
+      updatedData.adminAvatar = adminAvatarUpload.url;
     }
 
     const updatedAdmin = await adminModel.findByIdAndUpdate(
@@ -177,17 +181,17 @@ exports.updateAdmin = async (req, res) => {
 
     return res.status(200).json({
       statusCode: STATUS_CODES.OK,
-      message: "Admin updated successfully",
+      message: `${updatedAdmin.adminName} updated successfully`,
       data: updatedAdmin,
     });
   } catch (error) {
-    res.status(500).json({
-      errorStatusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
-      errorMessage: error.message,
+    console.error("Error updating admin:", error);
+    return res.status(500).json({
+      statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: error.message,
     });
   }
 };
-
 
 exports.adminLogin = async (req, res) => {
   try {
