@@ -69,6 +69,30 @@ exports.createAdmin = async (req, res) => {
     });
   }
 };
+exports.getAllAdmins = async (req, res) => {
+  try {
+    const admins = await adminModel.find().select("-adminPassword"); // Exclude password from the result
+
+    if (!admins || admins.length === 0) {
+      return res.status(404).json({
+        statusCode: STATUS_CODES.NOT_FOUND,
+        message: "No admins found",
+      });
+    }
+
+    return res.status(200).json({
+      statusCode: STATUS_CODES.OK,
+      message: "Admins retrieved successfully",
+      data: admins,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errorStatusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
+      errorMessage: error.message,
+    });
+  }
+};
+
 exports.deleteAdmin = async (req, res) => {
   try {
     const { adminId } = req.params;

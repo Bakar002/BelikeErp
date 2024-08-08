@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   createAdmin,
-  getAllAdmins,
+getAllAdmins,
   deleteAdmin,
   updateAdmin,
   adminLogin,
@@ -39,7 +39,7 @@ Router.route("/deleteadmin/:adminId").delete(deleteAdmin);
 Router.route("/updateadmin/:adminId").put(multipleUpload, updateAdmin);
 
 // Route to get all admins
-Router.route("/getalladmins").get(getAllAdmins);
+
 
 
 
@@ -47,9 +47,6 @@ Router.route("/getalladmins").get(getAllAdmins);
 Router.route("/createItStudent").post(multipleUpload,createItStudent);
 Router.route("/getItStudent").get(  isAdminAuthenticated,
 getItStudents);
-
-
-
 Router.route("/load-all-admins").get(getAllAdmins);
 Router.route("/login").post(adminLogin);
 Router.route("/add-student/:grade_id").post(
