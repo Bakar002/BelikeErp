@@ -30,6 +30,18 @@ const isAdminAuthenticated = require("../middlewares/isAdminAuthenticated.middle
 const Router = express.Router();
 
 Router.route("/createadmin").post(multipleUpload, createAdmin);
+// Route to delete an admin by ID
+Router.route("/deleteadmin/:adminId").delete(deleteAdmin);
+
+// Route to update an admin by ID
+Router.route("/updateadmin/:adminId").put(multipleUpload, updateAdmin);
+
+// Route to get all admins
+Router.route("/getalladmins").get(getAllAdmins);
+
+
+
+
 Router.route("/createItStudent").post(multipleUpload,createItStudent);
 Router.route("/getItStudent").get(  isAdminAuthenticated,
 getItStudents);

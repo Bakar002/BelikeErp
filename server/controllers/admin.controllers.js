@@ -26,8 +26,9 @@ exports.createAdmin = async (req, res) => {
       });
     }
     
-    const { adminName, adminEmail, adminPassword } = req.body;
+    const { adminName, adminEmail, adminPassword, address, locationLink, contactNumber } = req.body;
     
+    // Check if the email is already registered
     const adminEmailExists = await adminModel.findOne({ adminEmail });
     if (adminEmailExists) {
       return res.status(409).json({
@@ -38,6 +39,7 @@ exports.createAdmin = async (req, res) => {
 
     let adminAvatar = "null"; // Default value for avatar
     
+    // Handle file upload if there are any files
     if (files.length > 0) {
       const image = files[0];
       const imageURI = getImageUri(image); // Ensure this function correctly processes the image
@@ -45,11 +47,15 @@ exports.createAdmin = async (req, res) => {
       adminAvatar = imageUpload.url;
     }
     
+    // Create the admin with the additional fields
     await adminModel.create({
       adminName,
       adminEmail,
       adminPassword,
       adminAvatar,
+      address,
+      locationLink,
+      contactNumber,
     });
     
     return res.status(200).json({
@@ -63,22 +69,101 @@ exports.createAdmin = async (req, res) => {
     });
   }
 };
-// Controller function to get all admins
-exports.getAllAdmins = async (req, res) => {
+exports.deleteAdmin = async (req, res) => {
   try {
-    const admins = await adminModel.find({}, '_id adminName'); // Fetch only the ID and name
+    const { adminId } = req.params;
+
+    const admin = await adminModel.findById(adminId);
+
+    if (!admin) {
+      return res.status(404).json({
+        statusCode: STATUS_CODES.NOT_FOUND,
+        message: "Admin not found",
+      });
+    }
+
+    await adminModel.findByIdAndDelete(adminId);
+
     return res.status(200).json({
       statusCode: STATUS_CODES.OK,
-      message: "Admins fetched successfully",
-      data: admins,
+      message: "Admin deleted successfully",
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       errorStatusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
       errorMessage: error.message,
     });
   }
 };
+exports.updateAdmin = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+    const files = req.files || [];
+
+    if (!req.body) {
+      return res.status(404).json({
+        statusCode: STATUS_CODES.NOT_FOUND,
+        message: "Req Body is empty or null",
+      });
+    }
+
+    const {
+      adminName,
+      adminEmail,
+      adminPassword,
+      address,
+      locationLink,
+      contactNumber,
+    } = req.body;
+
+    let updatedData = {
+      adminName,
+      adminEmail,
+      address,
+      locationLink,
+      contactNumber,
+    };
+
+    // Handle password update if provided
+    if (adminPassword) {
+      const hashedPassword = await bcrypt.hash(adminPassword, 10);
+      updatedData.adminPassword = hashedPassword;
+    }
+
+    // Handle file upload if there are any files
+    if (files.length > 0) {
+      const image = files[0];
+      const imageURI = getImageUri(image); // Ensure this function correctly processes the image
+      const imageUpload = await cloudinary.uploader.upload(imageURI.content);
+      updatedData.adminAvatar = imageUpload.url;
+    }
+
+    const updatedAdmin = await adminModel.findByIdAndUpdate(
+      adminId,
+      updatedData,
+      { new: true, runValidators: true, context: 'query' }
+    );
+
+    if (!updatedAdmin) {
+      return res.status(404).json({
+        statusCode: STATUS_CODES.NOT_FOUND,
+        message: "Admin not found",
+      });
+    }
+
+    return res.status(200).json({
+      statusCode: STATUS_CODES.OK,
+      message: "Admin updated successfully",
+      data: updatedAdmin,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errorStatusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
+      errorMessage: error.message,
+    });
+  }
+};
+
 
 exports.adminLogin = async (req, res) => {
   try {

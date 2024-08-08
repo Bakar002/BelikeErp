@@ -1,19 +1,37 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+
 const adminSchema = mongoose.Schema(
   {
-    adminName: String,
+    adminName: {
+      type: String,
+      required: [true, "Admin name is required"],
+    },
     adminEmail: {
       type: String,
       unique: [true, "Email must be unique"],
-      required: [true, "Password is required"],
+      required: [true, "Email is required"],
     },
     adminPassword: {
       type: String,
       select: false,
       required: [true, "Password is required"],
     },
-    adminAvatar: String,
+    adminAvatar: {
+      type: String,
+    },
+    address: {
+      type: String,
+
+    },
+    locationLink: {
+      type: String,
+
+    },
+    contactNumber: {
+      type: String,
+
+    },
   },
   { timestamps: true }
 );
@@ -27,6 +45,7 @@ adminSchema.pre("save", async function (next) {
     return next(error);
   }
 });
+
 const adminModel = mongoose.model("Admin", adminSchema);
 
 module.exports = adminModel;
