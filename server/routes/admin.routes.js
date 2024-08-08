@@ -2,6 +2,8 @@ const express = require("express");
 const {
   createAdmin,
   getAllAdmins,
+  deleteAdmin,
+  updateAdmin,
   adminLogin,
   addStudent,
   addTeacher,
